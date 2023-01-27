@@ -11,6 +11,7 @@ on:
 
 env:
   MIX_ENV: test
+  FLY_API_TOKEN_TEST: ${{ secrets.FLY_API_TOKEN_TEST }}
 
 permissions:
   contents: read
@@ -59,8 +60,6 @@ jobs:
             ${{ runner.os }}-mix-
       - name: Echo env test
         shell: bash
-        env:
-          FLY_API_TOKEN_TEST: ${{ secrets.FLY_API_TOKEN_TEST }}
         run: |
           echo "FLY_API_TOKEN_TEST: $FLY_API_TOKEN_TEST"
       - name: Install dependencies
