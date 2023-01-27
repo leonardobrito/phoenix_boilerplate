@@ -20,9 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres
-        ports:
-          - 5432:5432
+        image: postgres:latest
+        ports: ['5432:5432']
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -66,6 +65,3 @@ jobs:
         run: mix format --check-formatted
       - name: Run tests
         run: mix test
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: postgres
