@@ -15,6 +15,7 @@ on:
 
 env:
   MIX_ENV: test
+  FLY_API_TOKEN_TEST: ${{ secrets.FLY_API_TOKEN_TEST }}
 
 permissions:
   contents: read
