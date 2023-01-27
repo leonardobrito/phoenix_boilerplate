@@ -12,6 +12,7 @@ on:
 
 env:
   MIX_ENV: test
+  FLY_API_TOKEN_TEST: ${{ secrets.FLY_API_TOKEN_TEST }}
 
 permissions:
   contents: read
@@ -19,7 +20,6 @@ permissions:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    secrets: inherit
     services:
       postgres:
         image: postgres:latest
@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-mix-
       - name: Echo env test
         shell: bash
-        run: echo ${{ secrets.FLY_API_TOKEN_TEST }}
+        run: echo $FLY_API_TOKEN_TEST
       - name: Install dependencies
         run: mix deps.get
       - name: Compiles without warnings
