@@ -12,7 +12,6 @@ on:
 
 env:
   MIX_ENV: test
-  FLY_API_TOKEN_TEST: ${{ secrets.FLY_API_TOKEN_TEST }}
 
 permissions:
   contents: read
@@ -59,9 +58,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mix-${{ env.cache-name }}-
             ${{ runner.os }}-mix-
-      - name: Echo env test
-        shell: bash
-        run: echo $FLY_API_TOKEN_TEST
       - name: Install dependencies
         run: mix deps.get
       - name: Compiles without warnings
