@@ -9,6 +9,12 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  MIX_ENV: test
+
+permissions:
+  contents: read
+
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -25,14 +31,42 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: erlef/setup-beam@v1
         with:
           elixir-version: '1.14.3'
           otp-version: '25'
-      - run: mix deps.get
-      - run: mix deps.compile
-      - run: mix test
+
+      - name: Cache deps
+      id: cache-deps
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-elixir-deps
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-mix-${{ env.cache-name }}-
+      - name: Cache compiled build
+      id: cache-build
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-compiled-build
+      with:
+        path: _build
+        key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-mix-${{ env.cache-name }}-
+          ${{ runner.os }}-mix-
+
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Compiles without warnings
+        run: mix compile --warnings-as-errors
+      - name: Check Formatting
+        run: mix format --check-formatted
+      - name: Run tests
+        run: mix test
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_HOST: postgres
