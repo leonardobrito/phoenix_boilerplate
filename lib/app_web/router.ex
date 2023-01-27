@@ -9,6 +9,21 @@ defmodule AppWeb.Router do
     pipe_through :api
   end
 
+  # swagger
+  scope "/api/swagger" do
+    forward("/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :app, swagger_file: "swagger.json")
+  end
+
+  def swagger_info do
+    %{
+      basePath: "/api",
+      info: %{
+        version: "1.0",
+        title: "App"
+      }
+    }
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
