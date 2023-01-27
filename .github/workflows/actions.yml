@@ -1,0 +1,37 @@
+name: Phoenix Boilerplate CI
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-elixir@v1
+        with:
+          elixir-version: '1.14.3'
+          otp-version: '25'
+      - run: mix deps.get
+      - run: mix deps.compile
+      - run: mix test
+        env:
+          DB_PASSWORD: postgres
+          DB_HOST: postgres
