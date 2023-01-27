@@ -1,0 +1,11 @@
+{
+  "basePath": "/api",
+  "definitions": {},
+  "host": "localhost:4000",
+  "info": {
+    "title": "App",
+    "version": "1.0"
+  },
+  "paths": {},
+  "swagger": "2.0"
+}
