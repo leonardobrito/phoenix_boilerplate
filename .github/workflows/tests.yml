@@ -8,17 +8,20 @@ on:
     branches:
       - main
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      FLY_API_TOKEN_TEST:
+        required: true
 
 env:
   MIX_ENV: test
+
 permissions:
   contents: read
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    secrets:
-      FLY_API_TOKEN_TEST: ${{ secrets.FLY_API_TOKEN_TEST }}
     services:
       postgres:
         image: postgres:latest
